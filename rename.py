@@ -1,6 +1,6 @@
 import os
 
-path = 'D:/Git/5f/data/old_morning/'
+path = 'D:/Git/5f/data/old_night/'
 f = []
 for (dirpath, dirnames, filenames) in os.walk(path):
     f.extend(filenames)
@@ -11,7 +11,8 @@ print(f)
 
 i = 0
 for v in f:
-    if v.endswith('jpeg') or v.endswith('jpg') or v.endswith('png'):
+    name = v.lower()
+    if name.endswith('jpeg') or name.endswith('jpg') or name.endswith('png'):
         while True:
             try:
                 os.rename(v, f'{path}{i}.jpg')
