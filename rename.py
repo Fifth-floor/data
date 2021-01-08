@@ -24,7 +24,7 @@ def get_files(path):
     return f_total
 
 
-folder = 'old_hi'
+folder = 'old_night'
 path = f'D:/Git/5f/data/{folder}/'
 
 f_total = get_files(path)
