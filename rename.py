@@ -1,5 +1,6 @@
 import os
-import json
+from SingleLog.log import Logger
+
 
 def get_file_name(path):
     result = os.path.splitext(path)[0]
@@ -24,32 +25,46 @@ def get_files(path):
     return f_total
 
 
-folder = 'old_night'
-path = f'D:/Git/5f/data/{folder}/'
+logger = Logger('rename_bot', Logger.INFO)
+path = f'D:/git/5floor/data/girl'
 
-f_total = get_files(path)
-for f in f_total:
-    if not is_valid_image(f):
-        print('remove', f)
-        os.remove(f)
 
-f_total = get_files(path)
-for i, f in enumerate(f_total):
-    # print('rename', f'{path}qqtemp_{i}.jpg')
-    os.rename(f, f'{path}qqtemp_{i}.jpg')
+# f_total = get_files(path)
+# removed = False
+# for f in f_total:
+#     if not is_valid_image(f):
+#         logger.show('Remote', f)
+#         removed = True
+#         # os.remove(f)
+#
+# if not removed:
+#     logger.show('沒有檔案被移除')
 
-max_index = 0
-f_total = get_files(path)
-for i, f in enumerate(f_total):
-    # print('rename', f'{path}qqtemp_{i}.jpg')
-    os.rename(f, f'{path}{i}.jpg')
-    max_index = i
+def find_max_file_name():
+    f_total = get_files(path)
+    max_name = 0
+    for f in f_total:
+        name = f[f.rfind('/') + 1:]
+        name = name[4:-4]
+        # logger.show(name)
 
-with open('index.json', encoding='utf-8') as f:
-    index_record = json.load(f)
+        if max_name < int(name):
+            max_name = int(name)
+    return max_name
 
-index_record[folder] = max_index
-print(index_record)
+move_file = False
 
-with open('index.json', 'w', encoding='utf-8',) as f:
-    json.dump(index_record, f, indent=4, ensure_ascii=False)
+max_name = find_max_file_name()
+logger.show('max name', max_name)
+
+for i in range(max_name):
+
+    tmp_file_name = f'D:/git/5floor/data/girl/{i}.jpg'
+    if not os.path.exists(tmp_file_name):
+        logger.show('檔案不存在', tmp_file_name)
+
+        if move_file:
+            current_max_name = find_max_file_name()
+            if current_max_name < i:
+                break
+            os.rename(f'D:/git/5floor/data/girl/{current_max_name}.jpg', tmp_file_name)
